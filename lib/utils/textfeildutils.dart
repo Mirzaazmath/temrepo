@@ -4,8 +4,9 @@ class Feilds extends StatefulWidget {
   TextEditingController controller;
   String hinttext;
   String title;
+  bool? readonly;
   bool ispassword;
-  Feilds({required this.controller,required this.hinttext,required this.ispassword,required this.title});
+  Feilds({required this.controller,required this.hinttext,required this.ispassword,required this.title,this.readonly});
   @override
   State<Feilds> createState() => _FeildsState();
 }
@@ -27,6 +28,8 @@ class _FeildsState extends State<Feilds> {
         normalgreytext(widget.title),
         const SizedBox(height: 10,),
         widget.ispassword!? TextFormField(
+
+
           obscureText: isshow!,
           controller: widget.controller,
           decoration: InputDecoration(
@@ -68,6 +71,7 @@ class _FeildsState extends State<Feilds> {
           },
         ):
         TextFormField(
+          readOnly: widget.readonly??false,
           controller: widget.controller,
           decoration: InputDecoration(
             hintText: widget.hinttext,

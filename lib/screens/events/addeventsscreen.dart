@@ -68,143 +68,159 @@ class _AddEventsScreenState extends State<AddEventsScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text("Add Events"),
       ),
-      body:  Padding(
-        padding:const  EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Feilds(controller:_eventtitle , hinttext: "Title", ispassword: false, title: "Event Title"),
-             const  SizedBox(height: 20,),
-              Row(
-                children: [
-                  Expanded(child: GestureDetector(
-                    onTap: () {
-                       _showTimepicker();
-                    },
-                    child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body:
+      CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding:const  EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    Feilds(controller:_eventtitle , hinttext: "Title", ispassword: false, title: "Event Title"),
+                    const  SizedBox(height: 20,),
+                    Row(
                       children: [
-                        normalgreytext("Select Time"),
-                        const SizedBox(height: 5,),
-
-                        TextFormField(
-
-                          controller: _timecontroller,
-                          decoration:  InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:const  BorderSide(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(13)
-                            ),
-                            enabled: false,
-                            hintText: "00:00",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
+                        Expanded(child: GestureDetector(
+                          onTap: () {
+                            _showTimepicker();
                           },
-                        ),
+                          child:  Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              normalgreytext("Select Time"),
+                              const SizedBox(height: 5,),
+
+                              TextFormField(
+
+                                controller: _timecontroller,
+                                decoration:  InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:const  BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(13)
+                                  ),
+                                  enabled: false,
+                                  hintText: "00:00",
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),),
+                        const  SizedBox(width: 20,),
+                        Expanded(child: GestureDetector(
+                          onTap: () {
+                            _pickDateDialog();
+                          },
+                          child:  Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              normalgreytext("Select Date"),
+                              const SizedBox(height: 5,),
+
+                              TextFormField(
+
+                                controller: _datecontroller,
+                                decoration:  InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:const  BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(13)
+                                  ),
+                                  enabled: false,
+                                  hintText: "----",
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),),
+
+
                       ],
                     ),
-                  ),),
-                 const  SizedBox(width: 20,),
-                  Expanded(child: GestureDetector(
-                    onTap: () {
-                       _pickDateDialog();
-                    },
-                    child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        normalgreytext("Select Date"),
-                        const SizedBox(height: 5,),
+                    const  SizedBox(height: 20,),
+                    normalgreytext("Description"),
+                    const SizedBox(height: 10,),
 
-                        TextFormField(
+                    TextFormField(
+                      maxLines: 5,
+                      controller:_descriptin,
+                      decoration: InputDecoration(
 
-                          controller: _datecontroller,
-                          decoration:  InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:const  BorderSide(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(13)
-                            ),
-                            enabled: false,
-                            hintText: "----",
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(13),
                         ),
-                      ],
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:const  BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(13)
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
                     ),
-                  ),),
+                   Expanded(child: Container(
+                     height: 100,
+                   )),
 
 
-                ],
-              ),
-              const  SizedBox(height: 20,),
-              normalgreytext("Description"),
-              const SizedBox(height: 10,),
+                    Custombutton(title: "Submit", ontap: (){
+                      FocusScope.of(context).unfocus();
+                      if (_formKey.currentState!.validate()) {
+                        var data= {
+                          "description": _descriptin.text.toString(),
+                          "selectDate": _datecontroller.text.toString(),
+                          "selectTime": "${_timecontroller.text}:0",
+                          "title": _eventtitle.text.toString(),
+                        };
+                        addeventcall(context,data);
+                        _timecontroller.text="";
+                        _datecontroller.text="";
+                        _eventtitle.text="";
+                        _descriptin.text="";
 
-              TextFormField(
-                maxLines: 5,
-                controller:_descriptin,
-                decoration: InputDecoration(
 
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide:const  BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(13)
-                  ),
+                      }
+
+                    }),
+
+
+                  ],
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
               ),
-              Spacer(),
-
-              Custombutton(title: "Submit", ontap: (){
-                if (_formKey.currentState!.validate()) {
-                  var data= {
-                    "description": _descriptin.text.toString(),
-                    "selectDate": _datecontroller.text.toString(),
-                     "selectTime": "${_timecontroller.text}:0",
-                    "title": _eventtitle.text.toString(),
-                  };
-                  addeventcall(context,data);
-                  // _timecontroller.text="";
-                  // _datecontroller.text="";
-                  // _eventtitle.text="";
-                  // _descriptin.text="";
-
-
-                }
-
-              }),
-              const  SizedBox(height: 20,),
-
-            ],
+            ),
           ),
-        ),
-      ),
+        ],
+      )
+      //   SingleChildScrollView(
+      //   child:
+      // ),
 
     );
   }

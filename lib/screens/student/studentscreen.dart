@@ -5,6 +5,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/studentprovider/getstudentprovider.dart';
+import '../dashboard/homeScreen.dart';
 import '../notifications/notificationscreen.dart';
 import '../profile/profilescreen.dart';
 class StudentScreen extends StatefulWidget {
@@ -107,7 +108,8 @@ class _StudentScreenState extends State<StudentScreen> {
           const  SizedBox(width: 10,),
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
+              getteacherinfo(context);
+             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
             },
             child: const  CircleAvatar(
               radius: 17,

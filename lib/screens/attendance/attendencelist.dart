@@ -34,7 +34,7 @@ class _AttendanceListState extends State<AttendanceList> {
   Widget build(BuildContext context) {
     List<StudentModel> _studentlist =
         context.watch<GetStudentProvider>().studentlist;
-    bool isLoad=context.watch<GetStudentProvider>().isload ;
+    // bool isLoad=context.watch<GetStudentProvider>().isload ;
     List<CreateAttendance> attendancelist =
         context.watch<AttendanceProvider>().getattendancelist;
     return SingleChildScrollView(
@@ -89,14 +89,17 @@ class _AttendanceListState extends State<AttendanceList> {
             const SizedBox(
               height: 20,
             ),
-            isLoad?AttendanceShimmer():_studentlist.isEmpty?
+          _studentlist.isEmpty?AttendanceShimmer():
 
-            Container(
-              height: 300,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: Text("No Data Found ",style: Theme.of(context).textTheme.headline4,),
-            ) :   ListView.builder(
+          // _studentlist.isEmpty?
+          //
+          //   Container(
+          //     height: 300,
+          //     width: double.infinity,
+          //     alignment: Alignment.center,
+          //     child: Text("No Data Found ",style: Theme.of(context).textTheme.headline4,),
+          //   ) :
+                ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: _studentlist.length,

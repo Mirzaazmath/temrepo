@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../model/eventmodel.dart';
 import '../../utils/loader.dart';
+import '../dashboard/homeScreen.dart';
 import '../notifications/notificationscreen.dart';
 import '../profile/profilescreen.dart';
 import 'addeventsscreen.dart';
@@ -32,7 +33,7 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     List<Eventsmodel> _evetlist= context.watch<GetEventsProvider>().eventlist ;
-    bool show= context.watch<GetEventsProvider>().isload ;
+    // bool show= context.watch<GetEventsProvider>().isload ;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +69,8 @@ class _EventsScreenState extends State<EventsScreen> {
           const  SizedBox(width: 10,),
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
+              getteacherinfo(context);
+             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
             },
             child: const  CircleAvatar(
               radius: 17,
@@ -104,7 +106,7 @@ class _EventsScreenState extends State<EventsScreen> {
             const   SizedBox(height: 20,),
               Text("Category",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold,fontSize: 20),),
               const   SizedBox(height: 20,),
-            show?EventShimmer() : Column(
+              Column(
               children: [
                 Row(
                   children: [
@@ -150,11 +152,13 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
                 const   SizedBox(height: 20,),
 
-                _evetlist.isEmpty?
-                Container(
-                  height: 300,
-                  alignment: Alignment.center,
-                  child: Text("No Events Found",style: Theme.of(context).textTheme.headline4),):  ListView.builder(
+                _evetlist.isEmpty?EventShimmer() :
+                // Container(
+                //   height: 300,
+                //   alignment: Alignment.center,
+                //   child: Text("No Events Found",style: Theme.of(context).textTheme.headline4),)
+                //     :
+                ListView.builder(
                     reverse: true,
                     physics:const  NeverScrollableScrollPhysics(),
                     shrinkWrap: true,

@@ -145,42 +145,42 @@ class EventShimmer extends StatelessWidget {
     return Column(
 
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-          children: [
-          Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-
-              child: Container(height: 55,
-                width: 100,
-               decoration: BoxDecoration(
-                 color: Colors.grey,
-                 borderRadius: BorderRadius.circular(30)
-               ),)),
-          Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-
-              child: Container(height: 55,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(30)
-                ),)),
-          Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-
-              child: Container(height: 55,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(30)
-                ),)),
-
-        ],),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //
+        //   children: [
+        //   Shimmer.fromColors(
+        //       baseColor: Colors.grey.shade300,
+        //       highlightColor: Colors.grey.shade100,
+        //
+        //       child: Container(height: 55,
+        //         width: 100,
+        //        decoration: BoxDecoration(
+        //          color: Colors.grey,
+        //          borderRadius: BorderRadius.circular(30)
+        //        ),)),
+        //   Shimmer.fromColors(
+        //       baseColor: Colors.grey.shade300,
+        //       highlightColor: Colors.grey.shade100,
+        //
+        //       child: Container(height: 55,
+        //         width: 100,
+        //         decoration: BoxDecoration(
+        //             color: Colors.grey,
+        //             borderRadius: BorderRadius.circular(30)
+        //         ),)),
+        //   Shimmer.fromColors(
+        //       baseColor: Colors.grey.shade300,
+        //       highlightColor: Colors.grey.shade100,
+        //
+        //       child: Container(height: 55,
+        //         width: 100,
+        //         decoration: BoxDecoration(
+        //             color: Colors.grey,
+        //             borderRadius: BorderRadius.circular(30)
+        //         ),)),
+        //
+        // ],),
 
         ListView.builder(
             physics: NeverScrollableScrollPhysics(),
@@ -191,7 +191,7 @@ class EventShimmer extends StatelessWidget {
                 Container(
                     margin: EdgeInsets.only(top: 20),
                     color: Colors.white,
-                    height: 100,
+                    height: 150,
                     width: double.infinity,
                     alignment: Alignment.center,
                     child:Column(

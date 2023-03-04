@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:asws_mobile/constant/apiendpoint.dart';
 import 'package:asws_mobile/utils/buttonutils.dart';
@@ -11,6 +12,8 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../model/teacherattendancemodel.dart';
+import '../../model/teachermodel.dart';
 import '../../utils/loader.dart';
 import '../notifications/notificationscreen.dart';
 import '../profile/profilescreen.dart';
@@ -27,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool ispressed = false;
   String checkintime = "";
   String? checkouttime;
+  String? workinghour;
   DateTime? starttime;
   DateTime? endtime;
   var longitude = "longitude";
@@ -38,8 +42,40 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     // Obtain shared preferences.
+    // checking the condition for check in
+    getcheckinfromdevice();
 
     _getcurrentlocation();
+  }
+
+  void getcheckinfromdevice() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? punchintime = await prefs.getString("checkin");
+    String? punchouttime = await prefs.getString("checkout");
+    bool checkone = punchintime != null && punchintime != "";
+    bool checktwo = punchouttime != null && punchouttime != "";
+
+    if (checkone && checktwo) {
+      setState(() {
+        ispressed = false;
+        checkintime = DateFormat.jm().format(DateTime.parse(punchintime));
+        checkouttime = DateFormat.jm().format(DateTime.parse(punchouttime));
+        starttime = DateTime.parse(punchintime);
+        endtime = DateTime.parse(punchouttime);
+        workinghour = "total";
+      });
+    } else {
+      if (checkone) {
+        setState(() {
+          ispressed = true;
+          checkintime = DateFormat.jm().format(DateTime.parse(punchintime));
+          workinghour = null;
+          checkouttime = null;
+        });
+      } else {
+        checkintime = "";
+      }
+    }
   }
 
   void _getcurrentlocation() async {
@@ -124,8 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ProfileScreen()));
+              getteacherinfo(context);
             },
             child: const CircleAvatar(
               radius: 17,
@@ -169,16 +204,17 @@ class _HomeScreenState extends State<HomeScreen> {
               Center(
                 child: GestureDetector(
                   onDoubleTap: () {
-                    setState(() {
-                      if (ispressed) {
-                        endtime = DateTime.now();
-                        checkouttime = DateFormat.jm().format(DateTime.now());
-                      } else {
-                        starttime = DateTime.now();
-                        checkintime = DateFormat.jm().format(DateTime.now());
-                      }
-                      ispressed = !ispressed;
-                    });
+                    if (ispressed) {
+                      checkoutcall(context);
+                      // endtime = DateTime.now();
+                      // checkouttime = DateFormat.jm().format(DateTime.now());
+                    } else {
+                      checkincall();
+                      // starttime = DateTime.now();
+                      // checkintime = DateFormat.jm().format(DateTime.now());
+                    }
+                    setState(() {});
+                    ispressed = !ispressed;
                   },
                   child: Container(
                     padding: const EdgeInsets.all(12),
@@ -292,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(
                           height: 5,
                         ),
-                        checkouttime == null
+                        workinghour == null
                             ? Text("")
                             : totaltime(starttime!, endtime!),
                         const SizedBox(
@@ -347,19 +383,77 @@ class _HomeScreenState extends State<HomeScreen> {
   void checkincall() async {
     // Obtain shared preferences.
     final prefs = await SharedPreferences.getInstance();
+
     starttime = DateTime.now();
     checkintime = DateFormat.jm().format(DateTime.now());
 
-    await prefs.setString('checkin', '$starttime');
+    String? checkout = prefs.getString("checkout");
+    // Here we are checking the checkout is already pressed or not
+    if (checkout == null) {
+      // not
+      await prefs.setString('checkin', '$starttime');
+    } else {
+      //yes
+      await prefs.setString('checkin', '$starttime');
+      await prefs.setString('checkout', '');
+      getcheckinfromdevice();
+    }
   }
 
-  void checkoutcall() async {
-    // Obtain shared preferences.
+  void checkoutcall(ctx) async {
+    GlobalMethods().showLoader(ctx, true);
     final prefs = await SharedPreferences.getInstance();
-    endtime = DateTime.now();
-    checkouttime = DateFormat.jm().format(DateTime.now());
+    final String? token = prefs.getString('token');
+    debugPrint("This Is token==$token");
+    var result;
+    final url =
+        Uri.parse("${ApiEndPoints.baseurl + ApiEndPoints.teacherattendance}");
+    print(url);
+    print(token);
+    // textwidget(),
+    String? punchintime = await prefs.getString("checkin");
 
-    await prefs.setString('checkout', '$endtime');
+    try {
+      var response = await post(url,
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode({
+            "checkOut": "${DateFormat.Hms().format(DateTime.now())}",
+            "checkin":
+                "${DateFormat.Hms().format(DateTime.parse(punchintime!))}",
+            "date": "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+            "id": "",
+            "teacherId": "string",
+            "teacherName": "string"
+          }));
+
+      GlobalMethods().showLoader(ctx, false);
+      if (response.body.isNotEmpty) {
+        result = json.decode(response.body);
+      }
+      debugPrint(result.toString());
+      if (response.statusCode == 200) {
+        jsonDecode(response.body);
+        TeacherAttendanceModel modeldata =
+            TeacherAttendanceModel.fromJson(jsonDecode(response.body));
+        endtime = DateTime.now();
+        checkouttime = DateFormat.jm().format(DateTime.now());
+        await prefs.setString('checkout', '$endtime');
+        getcheckinfromdevice();
+
+        debugPrint("Sucessfully Hit the Api");
+        showToast("Attendance Uploaded");
+        debugPrint(result.toString());
+      } else {
+        showToast("Something went wrong");
+        debugPrint("Something went wrong");
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+    // Obtain shared preferences.
   }
 
   Widget totaltime(DateTime checkintime, DateTime checkouttime) {
@@ -384,5 +478,44 @@ class ClockWidget extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+void getteacherinfo(ctx) async {
+  GlobalMethods().showLoader(ctx, true);
+  final prefs = await SharedPreferences.getInstance();
+  final String? token = prefs.getString('token');
+  debugPrint("This Is token==$token");
+  var result;
+  final url =
+      Uri.parse("${ApiEndPoints.baseurl + ApiEndPoints.getteacherinfoapi}2");
+  print(url);
+  print(token);
+
+  try {
+    var response = await get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    GlobalMethods().showLoader(ctx, false);
+    if (response.body.isNotEmpty) {
+      result = json.decode(response.body);
+    }
+    debugPrint(result.toString());
+    if (response.statusCode == 200) {
+      jsonDecode(response.body);
+      TeacherModel modeldata = TeacherModel.fromJson(jsonDecode(response.body));
+      Navigator.of(ctx).push(
+          MaterialPageRoute(builder: (context) => ProfileScreen(modeldata)));
+
+      debugPrint("Sucessfully Hit the Api");
+      debugPrint(result.toString());
+    } else {
+      showToast("Something went wrong");
+      debugPrint("Something went wrong");
+    }
+  } catch (error) {
+    debugPrint(error.toString());
   }
 }

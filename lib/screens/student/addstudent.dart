@@ -59,14 +59,17 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   String? issibling = "Yes";
   String? broorsis = "Brother";
 
-  String _currentSelectedValue = "";
+  String _currentSelectedcenter = "";
+  String _currentSelectedzone = "";
   String _parentstatus = "";
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    _currentSelectedValue = widget.droplist.first;
+    _currentSelectedcenter = widget.droplist.first;
+    _currentSelectedzone = widget.droplist.first;
+
     _parentstatus = widget.parentstatus.first;
   }
 
@@ -213,7 +216,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    value: _currentSelectedValue,
+                    value: _currentSelectedzone,
                     icon: const Icon(Icons.arrow_downward),
                     elevation: 16,
                     // style: const TextStyle(color: Colors.deepPurple),
@@ -224,7 +227,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     onChanged: (String? value) {
                       // This is called when the user selects an item.
                       setState(() {
-                        _currentSelectedValue = value!;
+                        _currentSelectedzone = value!;
                       });
                     },
                     items: widget.droplist
@@ -244,7 +247,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   ),
                   DropdownButton<String>(
                     isExpanded: true,
-                    value: _currentSelectedValue,
+                    value: _currentSelectedcenter,
                     icon: const Icon(Icons.arrow_downward),
                     elevation: 16,
                     // style: const TextStyle(color: Colors.deepPurple),
@@ -255,7 +258,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     onChanged: (String? value) {
                       // This is called when the user selects an item.
                       setState(() {
-                        _currentSelectedValue = value!;
+                        _currentSelectedcenter = value!;
                       });
                     },
                     items: widget.droplist
@@ -773,10 +776,14 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
 
   void addnewStudent(File? imageFileList, context) async {
     bool sib = issibling == "Yes";
+    int sibage = int.parse(
+        _siblingagecontroller.text.isEmpty ? "0" : _siblingagecontroller.text);
     debugPrint(sib.toString());
+    print(sibage);
     SharedPreferences userdata = await SharedPreferences.getInstance();
 
     final token = userdata.getString("token");
+    print(token);
 
     final url = Uri.parse(ApiEndPoints.baseurl + ApiEndPoints.addnewstudent);
 
@@ -793,7 +800,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
 
     request.fields.addAll({
       'student':
-          '{\n"addmissionNumber":68787,\n"addmissionDate":"${DateFormat('yyyy/MM/dd').format(DateTime.now())}",\n "firstName":"${_firstnamecontroller.text} ",\n"lastName":"${_lastnamecontroller.text}",\n"dateOfBirth":"${_dobcontroller.text}",\n"placeOfBirth":"ueruige3r",\n"priviousSchool":"${_schoolcontroller.text}",\n"email":"${_emailcontroller.text}",\n "phone":${int.parse(_phonecontroller.text)},\n    "address":"${_addresscontroller.text}",\n "state":"${_statecontroller.text}",\n "zipCode":${int.parse(_pincodecontroller.text)},\n "city":"${_citycontroller.text}",\n    "nearByCentre":"$_currentSelectedValue",\n "siblings":$sib,\n "brOrSis":"$broorsis",\n  "siblingFullName":"${_siblingfullnamecontroller.text}",\n "sibAge":${int.parse(_siblingagecontroller.text)},\n   "sibStandard":"${_siblingstandardcontroller.text}",\n "sibSidNumber":6890,\n  "parentalStatus":"$_parentstatus",\n"parentFirstName":"${_gardianfirstnameontroller.text}",\n "parentLastName":"${_gardianlastnameontroller.text}",\n "parentEmail":"${_gardianemailcontroller.text}",\n "parentPhone":45432453,\n  "parentDateOfBirth":"2002/3/12",\n"parentPlaceOfBirth":"fueuifh",\n    "mediumOfinstruction":"efiefib",\n "parentAddress":"${_gardianaddresscontroller.text}",\n"parentState":"euiiue",\n "parentZipCode":7979,\n"parentCity":"neifgeigfi",\n "educationQualification":"${_gardianeducationcontroller.text}",\n    "occupation":"${_gardianocccupationcontroller.text}"\n}'
+          '{\n"addmissionNumber":68787,\n"addmissionDate":"${DateFormat('yyyy/MM/dd').format(DateTime.now())}",\n "firstName":"${_firstnamecontroller.text} ",\n"lastName":"${_lastnamecontroller.text}",\n"dateOfBirth":"${_dobcontroller.text}",\n"placeOfBirth":"ueruige3r",\n"priviousSchool":"${_schoolcontroller.text}",\n"email":"${_emailcontroller.text}",\n "phone":${int.parse(_phonecontroller.text)},\n    "address":"${_addresscontroller.text}",\n "state":"${_statecontroller.text}",\n "zipCode":${int.parse(_pincodecontroller.text)},\n "city":"${_citycontroller.text}",\n    "nearByCentre":"$_currentSelectedcenter",\n "siblings":$sib,\n "brOrSis":"$broorsis",\n  "siblingFullName":"${_siblingfullnamecontroller.text}",\n "sibAge":$sibage,\n   "sibStandard":"${_siblingstandardcontroller.text}",\n "sibSidNumber":6890,\n  "parentalStatus":"$_parentstatus",\n"parentFirstName":"${_gardianfirstnameontroller.text}",\n "parentLastName":"${_gardianlastnameontroller.text}",\n "parentEmail":"${_gardianemailcontroller.text}",\n "parentPhone":45432453,\n  "parentDateOfBirth":"2002/3/12",\n"parentPlaceOfBirth":"fueuifh",\n    "mediumOfinstruction":"efiefib",\n "parentAddress":"${_gardianaddresscontroller.text}",\n"parentState":"euiiue",\n "parentZipCode":7979,\n"parentCity":"neifgeigfi",\n "educationQualification":"${_gardianeducationcontroller.text}",\n    "occupation":"${_gardianocccupationcontroller.text}"\n}'
     });
 
     var streamResponse = await request.send();
@@ -802,6 +809,35 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     GlobalMethods().showLoader(context, false);
     debugPrint(response.statusCode.toString());
     if (response.statusCode == 200) {
+      _firstnamecontroller.text = "";
+      _lastnamecontroller.text = "";
+
+      _statecontroller.text = "";
+      _citycontroller.text = "";
+      _pincodecontroller.text = "";
+      _siblingfullnamecontroller.text = "";
+      _siblingagecontroller.text = "";
+      _siblingstandardcontroller.text = "";
+      _siblingschoolnamecontroller.text = "";
+
+      _gardianfirstnameontroller.text = "";
+
+      _gardianlastnameontroller.text = "";
+      _gardianphonecontroller.text = "";
+      _gardianemailcontroller.text = "";
+      _gardianeducationcontroller.text = "";
+
+      _gardianaddresscontroller.text = "";
+      _gardianocccupationcontroller.text = "";
+
+      _dobcontroller.text = "";
+      _emailcontroller.text = "";
+      _addresscontroller.text = "";
+      _schoolcontroller.text = "";
+
+      _adhaarcontroller.text = "";
+      _phonecontroller.text = '';
+
       showToast("Post Uploaded Sucessfully");
     } else {
       showToast("Something Went Wrong");

@@ -15,4 +15,8 @@ class ApiEndPoints {
   static String getzonenames = "/zone/getallZones";
   //  submit attendance
   static String submitattendance = "/attendence/createNewAttendence";
+  // get teacher info
+  static String getteacherinfoapi = "/teacher/teacher/";
+  // teacherattendance
+  static String teacherattendance = "/teacherAttendence/createNewAttendence";
 }

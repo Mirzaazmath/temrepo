@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:asws_mobile/utils/buttonutils.dart';
 import 'package:asws_mobile/utils/textfeildutils.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/teachermodel.dart';
 import '../../utils/textutils.dart';
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  TeacherModel  teacherdata;
+   ProfileScreen(this.teacherdata,{Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -12,15 +17,38 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _namecontroller =  TextEditingController();
-  TextEditingController _gendercontroller=TextEditingController();
-  TextEditingController _dobcontroller=TextEditingController();
-  TextEditingController _emailcontroller=TextEditingController();
-  TextEditingController _addresscontroller =TextEditingController();
-  TextEditingController _universitycontroller=TextEditingController();
-  TextEditingController _startdatecontroller=TextEditingController();
-  TextEditingController _enddatecontroller=TextEditingController();
-  TextEditingController _degreecontroller=TextEditingController();
 
+  TextEditingController _gendercontroller=TextEditingController();
+
+  TextEditingController _dobcontroller=TextEditingController();
+
+  TextEditingController _emailcontroller=TextEditingController();
+
+  TextEditingController _addresscontroller =TextEditingController();
+
+  TextEditingController _universitycontroller=TextEditingController();
+
+  TextEditingController _startdatecontroller=TextEditingController();
+
+  TextEditingController _enddatecontroller=TextEditingController();
+
+  TextEditingController _degreecontroller=TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _namecontroller.text="${widget.teacherdata.firstName}  ${widget.teacherdata.lastName}";
+    //_gendercontroller.text="${widget.teacherdata.} ";
+    _dobcontroller.text="${widget.teacherdata.dateOfBirth}";
+    _emailcontroller.text="${widget.teacherdata.email}";
+    _addresscontroller.text="${widget.teacherdata.address}";
+    _universitycontroller.text="${widget.teacherdata.university}";
+    _startdatecontroller.text="${widget.teacherdata.startDate}";
+    _enddatecontroller.text="${widget.teacherdata.endDate}";
+    _degreecontroller.text="${widget.teacherdata.degree}";
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +100,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 30,
-                  backgroundImage: AssetImage("assets/images/person.jpeg"),
-                ),
+                  backgroundImage:MemoryImage(const Base64Decoder().convert(widget.teacherdata.photo.toString())),),
+                  // AssetImage("assets/images/person.jpeg"),
+
 
               ],
             ),
-            title: Text("Ahmed  Shareef",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+            title: Text("${widget.teacherdata.firstName}  ${widget.teacherdata.lastName} ",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
           ),
-            subtitle:  Text("99887366363",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+            subtitle:  Text("${widget.teacherdata.phone}",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
 
             ))),
              const  SizedBox(height: 10,),
@@ -102,21 +131,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Feilds(controller: _namecontroller, hinttext: "FullName", ispassword: false, title: "Full Name"),
+                    Feilds(controller: _namecontroller, hinttext: "FullName", ispassword: false, title: "Full Name",readonly: true,),
                    const  SizedBox(height: 20,),
                     Row(
                       children: [
-                        Expanded(child:  Feilds(controller: _gendercontroller, hinttext: "Male", ispassword: false, title: "Gender")),
+                        Expanded(child:  Feilds(controller: _gendercontroller, hinttext: "Male", ispassword: false, title: "Gender",readonly: true,)),
                        const  SizedBox(width: 10,),
-                        Expanded(child:  Feilds(controller: _dobcontroller, hinttext: "30-05-1995", ispassword: false, title: "D.O.B"))
+                        Expanded(child:  Feilds(controller: _dobcontroller, hinttext: "30-05-1995", ispassword: false, title: "D.O.B",readonly: true,))
                       ],
                     ),
                     const  SizedBox(height: 20,),
-                    Feilds(controller: _emailcontroller, hinttext: "email@.com", ispassword: false, title: "Email"),
+                    Feilds(controller: _emailcontroller, hinttext: "email@.com", ispassword: false, title: "Email",readonly: true,),
                     const  SizedBox(height: 20,),
                     normalgreytext("Address"),
                     const  SizedBox(height: 10,),
                     TextFormField(
+                      readOnly: true,
                       maxLines: 5,
                       controller:_addresscontroller,
                       decoration: InputDecoration(
@@ -160,17 +190,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Feilds(controller: _universitycontroller, hinttext: "Osmania", ispassword: false, title: "University"),
+                    Feilds(controller: _universitycontroller, hinttext: "Osmania", ispassword: false, title: "University",readonly: true,),
                     const  SizedBox(height: 20,),
                     Row(
                       children: [
-                        Expanded(child:  Feilds(controller: _startdatecontroller, hinttext: "05-06-2018", ispassword: false, title: "Start Date")),
+                        Expanded(child:  Feilds(controller: _startdatecontroller, hinttext: "05-06-2018", ispassword: false, title: "Start Date",readonly: true,)),
                         const  SizedBox(width: 10,),
-                        Expanded(child:  Feilds(controller: _enddatecontroller, hinttext: "30-05-2021", ispassword: false, title: "End Date"))
+                        Expanded(child:  Feilds(controller: _enddatecontroller, hinttext: "30-05-2021", ispassword: false, title: "End Date",readonly: true,))
                       ],
                     ),
                     const  SizedBox(height: 20,),
-                    Feilds(controller: _degreecontroller, hinttext: "Graduation", ispassword: false, title: "Degree"),
+                    Feilds(controller: _degreecontroller, hinttext: "Graduation", ispassword: false, title: "Degree",readonly: true,),
                     const  SizedBox(height: 20,),
 
                   ],

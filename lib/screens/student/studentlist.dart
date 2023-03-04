@@ -28,7 +28,7 @@ class _StudentListState extends State<StudentList> {
   @override
   Widget build(BuildContext context) {
     List<StudentModel> _studentlist= context.watch<GetStudentProvider>().studentlist ;
-    bool isLoad=context.watch<GetStudentProvider>().isload ;
+    // bool isLoad=context.watch<GetStudentProvider>().isload ;
 
     return SingleChildScrollView(
       child: Padding(
@@ -63,7 +63,7 @@ class _StudentListState extends State<StudentList> {
            const SizedBox(height: 20,),
             Text("Students",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold,fontSize: 18),),
             const SizedBox(height: 20,),
-            isLoad?StudentShimmer(): _studentlist.isEmpty?
+            _studentlist.isEmpty?StudentShimmer(): _studentlist.isEmpty?
 
             Container(
               height: 300,

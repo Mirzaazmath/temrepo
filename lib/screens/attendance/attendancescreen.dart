@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/studentprovider/getstudentprovider.dart';
+import '../dashboard/homeScreen.dart';
 import '../notifications/notificationscreen.dart';
 import 'attendanceanalytics.dart';
 import 'attendencelist.dart';
@@ -125,7 +126,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           const  SizedBox(width: 10,),
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
+              getteacherinfo(context);
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
             },
 
             child: const  CircleAvatar(
